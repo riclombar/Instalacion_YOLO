@@ -26,7 +26,7 @@ sudo apt install git
 	
 Se procede a crear un ambiente virtual dentro de la carpeta clonada de Darkflow. 
 ```
-cd darkflow
+cd Instalacion_YOLO
 virtualenv --python=python3 .venv
 source .venv/bin/activate
 ```
@@ -66,70 +66,6 @@ Si se muestra la ayuda del comando flow, todo está bien.
 ### Instalando componentes de la versión GPU de Tensorflow
 
 
-
-### Getting started
-
-You can choose _one_ of the following three ways to get started with darkflow.
-
-1. Just build the Cython extensions in place. NOTE: If installing this way you will have to use `./flow` in the cloned darkflow directory instead of `flow` as darkflow is not installed globally.
-    ```
-    python3 setup.py build_ext --inplace
-    ```
-
-2. Let pip install darkflow globally in dev mode (still globally accessible, but changes to the code immediately take effect)
-    ```
-    pip install -e .
-    ```
-
-3. Install with pip globally
-    ```
-    pip install .
-    ```
-
-## Update
-
-**Android demo on Tensorflow's** [here](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/android/src/org/tensorflow/demo/TensorFlowYoloDetector.java)
-
-**I am looking for help:**
- - `help wanted` labels in issue track
-
-## Parsing the annotations
-
-Skip this if you are not training or fine-tuning anything (you simply want to forward flow a trained net)
-
-For example, if you want to work with only 3 classes `tvmonitor`, `person`, `pottedplant`; edit `labels.txt` as follows
-
-```
-tvmonitor
-person
-pottedplant
-```
-
-And that's it. `darkflow` will take care of the rest. You can also set darkflow to load from a custom labels file with the `--labels` flag (i.e. `--labels myOtherLabelsFile.txt`). This can be helpful when working with multiple models with different sets of output labels. When this flag is not set, darkflow will load from `labels.txt` by default (unless you are using one of the recognized `.cfg` files designed for the COCO or VOC dataset - then the labels file will be ignored and the COCO or VOC labels will be loaded).
-
-## Design the net
-
-Skip this if you are working with one of the original configurations since they are already there. Otherwise, see the following example:
-
-```python
-...
-
-[convolutional]
-batch_normalize = 1
-size = 3
-stride = 1
-pad = 1
-activation = leaky
-
-[maxpool]
-
-[connected]
-output = 4096
-activation = linear
-
-...
-```
-
 ## Flowing the graph using `flow`
 
 ```bash
@@ -150,28 +86,6 @@ flow --model cfg/yolo-new.cfg
 flow --model cfg/yolo-new.cfg --load bin/tiny-yolo.weights
 # this will print out which layers are reused, which are initialized
 ```
-
-All input images from default folder `sample_img/` are flowed through the net and predictions are put in `sample_img/out/`. We can always specify more parameters for such forward passes, such as detection threshold, batch size, images folder, etc.
-
-```bash
-# Forward all images in sample_img/ using tiny yolo and 100% GPU usage
-flow --imgdir sample_img/ --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights --gpu 1.0
-```
-json output can be generated with descriptions of the pixel location of each bounding box and the pixel location. Each prediction is stored in the `sample_img/out` folder by default. An example json array is shown below.
-```bash
-# Forward all images in sample_img/ using tiny yolo and JSON output.
-flow --imgdir sample_img/ --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights --json
-```
-JSON output:
-```json
-[{"label":"person", "confidence": 0.56, "topleft": {"x": 184, "y": 101}, "bottomright": {"x": 274, "y": 382}},
-{"label": "dog", "confidence": 0.32, "topleft": {"x": 71, "y": 263}, "bottomright": {"x": 193, "y": 353}},
-{"label": "horse", "confidence": 0.76, "topleft": {"x": 412, "y": 109}, "bottomright": {"x": 592,"y": 337}}]
-```
- - label: self explanatory
- - confidence: somewhere between 0 and 1 (how confident yolo is about that detection)
- - topleft: pixel coordinate of top left corner of box.
- - bottomright: pixel coordinate of bottom right corner of box.
 
 ## Training new model
 
@@ -196,19 +110,6 @@ flow --model cfg/yolo-new.cfg --load 1500
 
 # Fine tuning yolo-tiny from the original one
 flow --train --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
-```
-
-Example of training on Pascal VOC 2007:
-```bash
-# Download the Pascal VOC dataset:
-curl -O https://pjreddie.com/media/files/VOCtest_06-Nov-2007.tar
-tar xf VOCtest_06-Nov-2007.tar
-
-# An example of the Pascal VOC annotation format:
-vim VOCdevkit/VOC2007/Annotations/000001.xml
-
-# Train the net on the Pascal dataset:
-flow --model cfg/yolo-new.cfg --train --dataset "~/VOCdevkit/VOC2007/JPEGImages" --annotation "~/VOCdevkit/VOC2007/Annotations"
 ```
 
 ### Training on your own dataset
@@ -286,47 +187,6 @@ To use your webcam/camera, simply replace `videofile.avi` with keyword `camera`.
 
 To save a video with predicted bounding box, add `--saveVideo` option.
 
-## Using darkflow from another python application
-
-Please note that `return_predict(img)` must take an `numpy.ndarray`. Your image must be loaded beforehand and passed to `return_predict(img)`. Passing the file path won't work.
-
-Result from `return_predict(img)` will be a list of dictionaries representing each detected object's values in the same format as the JSON output listed above.
-
-```python
-from darkflow.net.build import TFNet
-import cv2
-
-options = {"model": "cfg/yolo.cfg", "load": "bin/yolo.weights", "threshold": 0.1}
-
-tfnet = TFNet(options)
-
-imgcv = cv2.imread("./sample_img/sample_dog.jpg")
-result = tfnet.return_predict(imgcv)
-print(result)
-```
-
-
-## Save the built graph to a protobuf file (`.pb`)
-
-```bash
-## Saving the lastest checkpoint to protobuf file
-flow --model cfg/yolo-new.cfg --load -1 --savepb
-
-## Saving graph and weights to protobuf file
-flow --model cfg/yolo.cfg --load bin/yolo.weights --savepb
-```
-When saving the `.pb` file, a `.meta` file will also be generated alongside it. This `.meta` file is a JSON dump of everything in the `meta` dictionary that contains information nessecary for post-processing such as `anchors` and `labels`. This way, everything you need to make predictions from the graph and do post processing is contained in those two files - no need to have the `.cfg` or any labels file tagging along.
-
-The created `.pb` file can be used to migrate the graph to mobile devices (JAVA / C++ / Objective-C++). The name of input tensor and output tensor are respectively `'input'` and `'output'`. For further usage of this protobuf file, please refer to the official documentation of `Tensorflow` on C++ API [_here_](https://www.tensorflow.org/versions/r0.9/api_docs/cc/index.html). To run it on, say, iOS application, simply add the file to Bundle Resources and update the path to this file inside source code.
-
-Also, darkflow supports loading from a `.pb` and `.meta` file for generating predictions (instead of loading from a `.cfg` and checkpoint or `.weights`).
-```bash
-## Forward images in sample_img for predictions based on protobuf file
-flow --pbLoad built_graph/yolo.pb --metaLoad built_graph/yolo.meta --imgdir sample_img/
-```
-If you'd like to load a `.pb` and `.meta` file when using `return_predict()` you can set the `"pbLoad"` and `"metaLoad"` options in place of the `"model"` and `"load"` options you would normally set.
-
-That's all.
 
 ## Créditos
 
