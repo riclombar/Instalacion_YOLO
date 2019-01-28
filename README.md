@@ -14,22 +14,22 @@ Python3, tensorflow 1.0, numpy, opencv 3.
 ## Instalación
 
 Seleccionar la carpeta de instalación.
-    ```
-    cd Documentos
-    git clone https://github.com/riclombar/Instalacion_YOLO
-    ```
+```
+cd Documentos
+git clone https://github.com/riclombar/Instalacion_YOLO
+```
 	
 Si el comando `git` no se encuentra, se necesita instalar git.
-    ```
-    sudo apt install git
-    ```
+```
+sudo apt install git
+```
 	
 Se procede a crear un ambiente virtual dentro de la carpeta clonada de Darkflow. 
-    ```
-    cd darkflow
-    virtualenv --python=python3 .venv
-    source .venv/bin/activate
-    ```
+```
+cd darkflow
+virtualenv --python=python3 .venv
+source .venv/bin/activate
+```
 	
 Nótese que si se tiene una versión de python 3 más nueva que la versión 3.6, se debe indicar que se cree el ambiente virtual con la versión python 3.6.
     ```
