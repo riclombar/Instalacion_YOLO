@@ -1,20 +1,25 @@
 ## Intro
 
-Tutorial para instalar YOLO a través de [Darkflow](https://github.com/thtrieu/darkflow), el cual es una herramienta escrita en Python 3 que hace las redes neuronales de código abierto [Darknet](https://pjreddie.com/darknet/) disponibles en Python usando Tensorflow. 
+Tutorial y primeros pasos para instalar YOLO a través de [Darkflow](https://github.com/thtrieu/darkflow), el cual es una herramienta escrita en Python 3 que hace las redes neuronales de código abierto [Darknet](https://pjreddie.com/darknet/) disponibles en Python usando Tensorflow. 
 
 Clasificación y detección de objetos en tiempo real. Artículo: [version 1](https://arxiv.org/pdf/1506.02640.pdf), [version 2](https://arxiv.org/pdf/1612.08242.pdf).
 
-Read more about YOLO (in darknet) and download weight files [here](http://pjreddie.com/darknet/yolo/). In case the weight file cannot be found, I uploaded some of mine [here](https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU), which include `yolo-full` and `yolo-tiny` of v1.0, `tiny-yolo-v1.1` of v1.1 and `yolo`, `tiny-yolo-voc` of v2.
+Se pueden consultar los archivos .weight directo de [este enlace](https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU).
 
 
-See demo below or see on [this imgur](http://i.imgur.com/EyZZKAA.gif)
-
-<p align="center"> <img src="demo.gif"/> </p>
-
-## Dependencies
+## Dependencias
 
 Python3, tensorflow 1.0, numpy, opencv 3.
 
+## Instalación
+
+Seleccionar la carpeta de instalación
+    ```
+    cd Documentos
+    ```
+    ``
+    git clone https://github.com/riclombar/Instalacion_Darkflow
+    ``
 ### Getting started
 
 You can choose _one_ of the following three ways to get started with darkflow.
@@ -275,3 +280,7 @@ flow --pbLoad built_graph/yolo.pb --metaLoad built_graph/yolo.meta --imgdir samp
 If you'd like to load a `.pb` and `.meta` file when using `return_predict()` you can set the `"pbLoad"` and `"metaLoad"` options in place of the `"model"` and `"load"` options you would normally set.
 
 That's all.
+
+## Créditos
+
+Los créditos de este código son de https://github.com/thtrieu. Así como el tutorial de instalación en [este gist](https://gist.githubusercontent.com/simonw/0f93bec220be9cf8250533b603bf6dba/raw/6ce2fb8be577abe8f94adbcab18fd54fd29f93d1/darkflow-osx.md)
