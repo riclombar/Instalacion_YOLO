@@ -32,34 +32,34 @@ source .venv/bin/activate
 ```
 	
 Nótese que si se tiene una versión de python 3 más nueva que la versión 3.6, se debe indicar que se cree el ambiente virtual con la versión python 3.6.
-    ```
-    virtualenv --python=python3.6 .venv
-    ```
+```
+virtualenv --python=python3.6 .venv
+```
 
 Si no se tiene instalado `virtualenv`.
-    ```
-    sudo apt install virtualenv
-    ```
+```
+sudo apt install virtualenv
+```
 	
 Se necesitan instalar las siguientes librerías.
-    ```
-    pip install Cython
-    pip install numpy
-    pip install tensorflow
-    pip install opencv-python
-    pip install .
-    python setup.py build_ext --inplace
-    ```
+```
+pip install Cython
+pip install numpy
+pip install tensorflow
+pip install opencv-python
+pip install .
+python setup.py build_ext --inplace
+```
 	
 Para la instalación de tensorflow también puedes ir a la página oficial de [Tensorflow](https://www.tensorflow.org/install/pip) y buscar la versión de Tensorflow correspondiente a tu versión de python, ejemplo para versión de python 3.6 versión de CPU.
-    ```
-    pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.12.0-cp36-cp36m-linux_x86_64.whl
-    ```
+```
+pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.12.0-cp36-cp36m-linux_x86_64.whl
+```
 	
 Con eso termina la instalación de darflow corriendo en Tensorflow con versión de CPU. Para comprobar que darkflow funciona correctamente, se puede usar el siguiente comando:
-	```
-    flow --help
-    ```
+```
+flow --help
+```
 	
 Si se muestra la ayuda del comando flow, todo está bien.
 
