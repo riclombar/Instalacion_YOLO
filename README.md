@@ -16,8 +16,6 @@ Python3, tensorflow 1.0, numpy, opencv 3.
 Seleccionar la carpeta de instalación
     ```
     cd Documentos
-    ```
-    ```
     git clone https://github.com/riclombar/Instalacion_YOLO
     ```
 ### Getting started
