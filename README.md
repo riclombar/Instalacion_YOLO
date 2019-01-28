@@ -17,9 +17,9 @@ Seleccionar la carpeta de instalación
     ```
     cd Documentos
     ```
-    ``
-    git clone https://github.com/riclombar/Instalacion_Darkflow
-    ``
+    ```
+    git clone https://github.com/riclombar/Instalacion_YOLO
+    ```
 ### Getting started
 
 You can choose _one_ of the following three ways to get started with darkflow.
