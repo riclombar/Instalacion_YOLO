@@ -65,6 +65,48 @@ Si se muestra la ayuda del comando flow, todo está bien.
 
 ### Instalando componentes de la versión GPU de Tensorflow
 
+Para usar la versión GPU de Tensorflow es necesario instalar los drivers de nvidia, así como el Toolkit de nvidia y cuDNN. Para esto se requieren tarjetas de gráficos habilitados por CUDA. La lista de tarjetas está disponible en: https://developer.nvidia.com/cuda-gpus.
+
+Para instalar los drivers de nvidia es recomendable leer la documentación. Adicionalmente, puedes consultar [esta](http://www.linuxandubuntu.com/home/how-to-install-latest-nvidia-drivers-in-linux) guía.
+
+#### Instalando CUDA Toolkit 9.0
+
+Se procede con la instalación del Toolkit de CUDA. Se necesita descargar el archivo de [aquí](https://developer.nvidia.com/cuda-90-download-archive), es importante que la versión del Toolkit sea la nueve pues Tensoflow está soportado para esa versión. Se procede a seleccionar el sistema operativo, la arquitectura x64, la distribución de linux, la versión de ubuntu (si es ubuntu 18, selecciona ubuntu 17) y, finalmente, el instalador deb. Debe quedar como se muestra [aquí](https://developer.nvidia.com/cuda-90-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1704&target_type=deblocal).
+
+Descarga el primer archivo y los primeros dos parches (hay más parches pero no son necesarios). Para instalar:
+```
+sudo dpkg -i cuda-repo-ubuntu1704-9-0-local_9.0.176-1_amd64.deb
+sudo apt-key add /var/cuda-repo-9-0-local/7fa2af80.pub
+sudo apt-get update
+sudo apt-get install cuda
+```
+
+Para instalar los parches los abrimos con el instalador de software de ubuntu y hacemos la instalación. Necesitas actualizar tu variable PATH.
+```
+sudo nano ~/.bashrc
+```
+
+Ve hasta la última línea y añade las líneas siguientes:
+```
+export PATH=/usr/local/cuda-9.0/bin${PATH:+:$PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+```
+
+Luego guardas con `CTRL-o`, presionas `ENTER` y cierras con `CTRL-x`.
+
+#### Instalando cuDNN
+
+Ve a https://developer.nvidia.com/cudnn y dirígete a descargas. Se te pide que te registres si es la primera vez, selecciona el link que dice Releases archivados y selecciona la versión 7.0.5 para CUDA Toolkit 9.0 de la fecha 5 de de diciembre de 2017. Descarga la librería para linuz que viene en un archivo `.tar`. Abre una terminal donde guardaste el archivo `.tar` y descomprime usando el comando:
+```
+tar -xzvf cudnn-9.0-linux-x64-v7.tgz
+```
+
+Finalmente, corre los siguientes comandos para mover los archivos correspondientes a tu folder de CUDA.
+```
+sudo cp cuda/include/cudnn.h /usr/local/cuda/include
+sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+```
 
 ## Flowing the graph using `flow`
 
