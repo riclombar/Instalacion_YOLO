@@ -6,11 +6,6 @@ Clasificación y detección de objetos en tiempo real. Artículo: [version 1](ht
 
 Se pueden consultar los archivos .weight directo de [este enlace](https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU).
 
-
-## Dependencias
-
-Python3, tensorflow 1.0, numpy, opencv 3.
-
 ## Instalación
 
 Seleccionar la carpeta de instalación.
@@ -96,7 +91,7 @@ Luego guardas con `CTRL-o`, presionas `ENTER` y cierras con `CTRL-x`.
 
 #### Instalando cuDNN
 
-Ve a https://developer.nvidia.com/cudnn y dirígete a descargas. Se te pide que te registres si es la primera vez, selecciona el link que dice Releases archivados y selecciona la versión 7.0.5 para CUDA Toolkit 9.0 de la fecha 5 de de diciembre de 2017. Descarga la librería para linuz que viene en un archivo `.tar`. Abre una terminal donde guardaste el archivo `.tar` y descomprime usando el comando:
+Ve a https://developer.nvidia.com/cudnn y dirígete a descargas. Se te pide que te registres si es la primera vez, selecciona el link que dice Releases archivados y selecciona la versión 7.0.5 para CUDA Toolkit 9.0 de la fecha 5 de de diciembre de 2017. Descarga la librería para linux que viene en un archivo `.tar`. Abre una terminal donde guardaste el archivo `.tar` y descomprime usando el comando:
 ```
 tar -xzvf cudnn-9.0-linux-x64-v7.tgz
 ```
@@ -107,6 +102,17 @@ sudo cp cuda/include/cudnn.h /usr/local/cuda/include
 sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
 sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
 ```
+
+#### Instalando Tensorflow GPU
+
+En la [página oficial de Tensorflow](https://www.tensorflow.org/install/pip) consulta  la versión que quieres instalar y corre el comando:
+```
+pip install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.12.0-cp36-cp36m-linux_x86_64.whl
+```
+
+Donde la URL corresponde con la versión que elegiste.
+
+## Abre tu ambiente virtual
 
 ## Flowing the graph using `flow`
 
