@@ -136,87 +136,59 @@ mkdir bin
 Con este comando usas las fotos que están disponibles en la carpeta sample para probar los weights que descargaste.
 ```
 flow --imgdir sample_img/ --model cfg/yolo.cfg --load bin/yolo.weights
-open sample_img/out/
 ```
 
+Si tienes fotos que quieras probar crea una carpeta con tus fotos y corre:
+```
+flow --imgdir my_photos/ --model cfg/yolo.cfg --load bin/yolo.weights
+open my_photos/out/
+```
 
+Los resultados se muestran en una carpeta llamada 'out' dentro del directorio de las fotos.
 
-Y para probarlo puedes usar la cámara de tu ordenador o usar un video que tengas disponible.
-
-
-For a demo that entirely runs on the CPU:
-
-```bash
+Adicionalmente, puedes probar el algoritmo con la cámara de tu ordenador o con un video.
+Con video:
+```
 flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi
 ```
 
-For a demo that runs 100% on the GPU:
+Si queres que tu modelo corra con GPU solo agrega '--gpu 1.0' al final.
 
 ```bash
 flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi --gpu 1.0
 ```
 
-To use your webcam/camera, simply replace `videofile.avi` with keyword `camera`.
+Para usar la webcam, solo reemplaza `videofile.avi` con la palabra `camera`.
+Para guardar un video añade `--saveVideo` al final.
 
-To save a video with predicted bounding box, add `--saveVideo` option.
+## Entrenando un modelo nuevo
 
-
-
-## Flowing the graph using `flow`
-
-```bash
-# Have a look at its options
-flow --h
+Para realizar el entrenamiento solo debes añadir la opción `--train`.
 ```
-
-First, let's take a closer look at one of a very useful option `--load`
-
-```bash
-# 1. Load tiny-yolo.weights
-flow --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
-
-# 2. To completely initialize a model, leave the --load option
-flow --model cfg/yolo-new.cfg
-
-# 3. It is useful to reuse the first identical layers of tiny for `yolo-new`
-flow --model cfg/yolo-new.cfg --load bin/tiny-yolo.weights
-# this will print out which layers are reused, which are initialized
-```
-
-## Training new model
-
-Training is simple as you only have to add option `--train`. Training set and annotation will be parsed if this is the first time a new configuration is trained. To point to training set and annotations, use option `--dataset` and `--annotation`. A few examples:
-
-```bash
-# Initialize yolo-new from yolo-tiny, then train the net on 100% GPU:
+# Inicializa yolo-new desde yolo-tiny, luego entrena la red con 100% GPU:
 flow --model cfg/yolo-new.cfg --load bin/tiny-yolo.weights --train --gpu 1.0
-
-# Completely initialize yolo-new and train it with ADAM optimizer
-flow --model cfg/yolo-new.cfg --train --trainer adam
 ```
+Durante el entrenamiento, el código guarda ocasionalmente los resultados en checkpoints de tensorflow, guardados en `ckpt/`. Para continuar a partir de cualquier checkpoint antes de reanudar el entrenamiento, usa `--load (número de checkpoint)`, si `checkpoint_num < 0`, `darkflow` cargará el checkpoint más reciente.
 
-During training, the script will occasionally save intermediate results into Tensorflow checkpoints, stored in `ckpt/`. To resume to any checkpoint before performing training/testing, use `--load [checkpoint_num]` option, if `checkpoint_num < 0`, `darkflow` will load the most recent save by parsing `ckpt/checkpoint`.
-
-```bash
-# Resume the most recent checkpoint for training
+```
+# Continuar desde el checkpoint más reciente
 flow --train --model cfg/yolo-new.cfg --load -1
 
-# Test with checkpoint at step 1500
+# Continuar con el checkpoint en el paso 1500
 flow --model cfg/yolo-new.cfg --load 1500
 
-# Fine tuning yolo-tiny from the original one
+# Afinar yolo-tiny a partir del original
 flow --train --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
 ```
 
-### Training on your own dataset
+### Entrenar con tu propio dataset
 
-*The steps below assume we want to use tiny YOLO and our dataset has 3 classes*
+*Los pasos siguientes asumen que queremos usar tiny YOLO y nuestro dataset tiene 3 clases*
 
-1. Create a copy of the configuration file `tiny-yolo-voc.cfg` and rename it according to your preference `tiny-yolo-voc-3c.cfg` (It is crucial that you leave the original `tiny-yolo-voc.cfg` file unchanged, see below for explanation).
+1. Crea una copia del archivo de configuración `tiny-yolo-voc.cfg` y renómbrala de acuerdo con tu preferencia `tiny-yolo-voc-3c.cfg` (es crucial que dejes el archivo original sin cambios).
 
-2. In `tiny-yolo-voc-3c.cfg`, change classes in the [region] layer (the last layer) to the number of classes you are going to train for. In our case, classes are set to 3.
-    
-    ```python
+2. En `tiny-yolo-voc-3c.cfg`, cambia las clases en la capa [region] (la última) para el número de clases que vas a entrenar. En este caso, classes se pone en 3. 
+    ```
     ...
 
     [region]
@@ -230,8 +202,7 @@ flow --train --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
     ...
     ```
 
-3. In `tiny-yolo-voc-3c.cfg`, change filters in the [convolutional] layer (the second to last layer) to num * (classes + 5). In our case, num is 5 and classes are 3 so 5 * (3 + 5) = 40 therefore filters are set to 40.
-    
+3. En `tiny-yolo-voc-3c.cfg`, cambia los filtros en la capa [convolutional] (penúltima) por num * (classes + 5). En nuestro caso, num es 5 y classes son 3 entonces 5 * (3 + 5) = 40 por tanto, filters se pone en 40.   
     ```python
     ...
 
@@ -248,18 +219,17 @@ flow --train --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
     ...
     ```
 
-4. Change `labels.txt` to include the label(s) you want to train on (number of labels should be the same as the number of classes you set in `tiny-yolo-voc-3c.cfg` file). In our case, `labels.txt` will contain 3 labels.
-
+4. Cambia `labels.txt` para incluir las etiquetas con las que quieras entrenar (el número de etiquetas debe ser el mismo que el número de clases que pusiste en `tiny-yolo-voc-3c.cfg`). En nuestro caso, `labels.txt` contendrá tres etiquetas.
     ```
-    label1
-    label2
-    label3
+    persona
+    pasillo
+    puerta
     ```
-5. Reference the `tiny-yolo-voc-3c.cfg` model when you train.
-
-    `flow --model cfg/tiny-yolo-voc-3c.cfg --load bin/tiny-yolo-voc.weights --train --annotation train/Annotations --dataset train/Images`
-
-
-* Why should I leave the original `tiny-yolo-voc.cfg` file unchanged?
     
-    When darkflow sees you are loading `tiny-yolo-voc.weights` it will look for `tiny-yolo-voc.cfg` in your cfg/ folder and compare that configuration file to the new one you have set with `--model cfg/tiny-yolo-voc-3c.cfg`. In this case, every layer will have the same exact number of weights except for the last two, so it will load the weights into all layers up to the last two because they now contain different number of weights.
+5. Haz referencia al modelo `tiny-yolo-voc-3c.cfg` cuando entrenes.
+```
+flow --model cfg/tiny-yolo-voc-3c.cfg --load bin/tiny-yolo-voc.weights --train --annotation train/Annotations --dataset train/Images
+```
+*¿Por qué no debo cambiar el archivo original `tiny-yolo-voc.cfg`?
+  
+Cuando darkflow ve que estás cargando `tiny-yolo-voc.weights` va a buscar el archivo `tiny-yolo-voc.cfg`en tu folder cfg\ y lo va a comparar con el archivo de configuación nuevo que has puesto con `--model cfg/tiny-yolo-voc-3c.cfg`. En este caso, cada capa tendrá el número mismo número de weights excepto porlos últimos dos, así que cargará los weights en todas las capas hasta las últimas dos porque ahora contienen números diferentes de weights.
