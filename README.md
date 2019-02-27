@@ -114,6 +114,54 @@ Donde la URL corresponde con la versión que elegiste.
 
 ## Abre tu ambiente virtual
 
+Párate sobre la carpeta donde clonaste el respositorio
+```
+cd Instalacion_YOLO
+```
+
+Con el siguiente comando abres tu ambiente virtual
+```
+source .venv/bin/activate
+```
+
+## Pruebas iniciales
+
+Primero necesitas descargar los weights de YOLO y ponerlos en una carpeta bin. Los weights los puedes encontrar en la página de Darknet de Joseph Redmon. El problema es que los actualiza y darkflow funciona con las versiones iniciales de los weights, por lo tanto, los puedes descargar de este [link](https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU).
+
+Una vez que descargaste un weight, lo pones en una carpeta que nombraremos bin.
+```
+mkdir bin
+```
+
+Con este comando usas las fotos que están disponibles en la carpeta sample para probar los weights que descargaste.
+```
+flow --imgdir sample_img/ --model cfg/yolo.cfg --load bin/yolo.weights
+open sample_img/out/
+```
+
+
+
+Y para probarlo puedes usar la cámara de tu ordenador o usar un video que tengas disponible.
+
+
+For a demo that entirely runs on the CPU:
+
+```bash
+flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi
+```
+
+For a demo that runs 100% on the GPU:
+
+```bash
+flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi --gpu 1.0
+```
+
+To use your webcam/camera, simply replace `videofile.avi` with keyword `camera`.
+
+To save a video with predicted bounding box, add `--saveVideo` option.
+
+
+
 ## Flowing the graph using `flow`
 
 ```bash
@@ -215,27 +263,3 @@ flow --train --model cfg/tiny-yolo.cfg --load bin/tiny-yolo.weights
 * Why should I leave the original `tiny-yolo-voc.cfg` file unchanged?
     
     When darkflow sees you are loading `tiny-yolo-voc.weights` it will look for `tiny-yolo-voc.cfg` in your cfg/ folder and compare that configuration file to the new one you have set with `--model cfg/tiny-yolo-voc-3c.cfg`. In this case, every layer will have the same exact number of weights except for the last two, so it will load the weights into all layers up to the last two because they now contain different number of weights.
-
-
-## Camera/video file demo
-
-For a demo that entirely runs on the CPU:
-
-```bash
-flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi
-```
-
-For a demo that runs 100% on the GPU:
-
-```bash
-flow --model cfg/yolo-new.cfg --load bin/yolo-new.weights --demo videofile.avi --gpu 1.0
-```
-
-To use your webcam/camera, simply replace `videofile.avi` with keyword `camera`.
-
-To save a video with predicted bounding box, add `--saveVideo` option.
-
-
-## Créditos
-
-Los créditos de este código son de https://github.com/thtrieu. Así como el tutorial de instalación en [este gist](https://gist.githubusercontent.com/simonw/0f93bec220be9cf8250533b603bf6dba/raw/6ce2fb8be577abe8f94adbcab18fd54fd29f93d1/darkflow-osx.md)
