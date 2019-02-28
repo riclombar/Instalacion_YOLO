@@ -233,3 +233,44 @@ flow --model cfg/tiny-yolo-voc-3c.cfg --load bin/tiny-yolo-voc.weights --train -
 *¿Por qué no debo cambiar el archivo original `tiny-yolo-voc.cfg`?
   
 Cuando darkflow ve que estás cargando `tiny-yolo-voc.weights` va a buscar el archivo `tiny-yolo-voc.cfg`en tu folder cfg\ y lo va a comparar con el archivo de configuación nuevo que has puesto con `--model cfg/tiny-yolo-voc-3c.cfg`. En este caso, cada capa tendrá el número mismo número de weights excepto porlos últimos dos, así que cargará los weights en todas las capas hasta las últimas dos porque ahora contienen números diferentes de weights.
+
+# Instalación labelImg
+
+En este caso usaremos LabelImg para crear las cajas delimitadoras. Puedes usar otras herramientas mientras te arrojen el resultado en formato `.xml`.
+
+1. Clona labelImg.
+```
+git clone sudo https://github.com/tzutalin/labelImg
+```
+
+2. Instala pyqt5-dev-tools
+```
+sudo apt-get install pyqt5-dev-tools
+```
+
+3. Instala lxml.
+```
+sudo apt-get install python3-lxml
+```
+
+4. Make qt5py3
+```
+cd labelImg
+make qt5py3
+```
+
+5. Compila labelImg.py
+```
+cd labelImg
+python3 labelImg.py
+```
+
+El último comando debe abrir el programa.
+
+## Crea tu propio Dataset
+
+Con el botón `open dir` selecciona el directorio donde tienes almacenadas las fotos que usarás para tu dataset. Con el botón `change save dir` selecciona la carpeta donde quieras que se guarden los cambios.
+
+Con cada imagen, pones una caja alrededor del objeto con el botón `create`. Una vez que dibujaste la caja, te pedirá que le asignas una etiqueta, la etiqueta que le pongas debe tener el mismo nombre que asignarás para el archivo `labels.txt`.
+
+Por último, entrena tu modelo con las instrucciones de arriba y ten en cuenta que para entrenar con tu Dataset debes usar alrededor de 2000 steps.
