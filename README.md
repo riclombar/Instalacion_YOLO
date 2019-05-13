@@ -107,7 +107,7 @@ sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
 
 En la [página oficial de Tensorflow](https://www.tensorflow.org/install/pip) consulta  la versión que quieres instalar y corre el comando:
 ```
-pip install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.12.0-cp36-cp36m-linux_x86_64.whl
+pip3 install https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.12.0-cp36-cp36m-linux_x86_64.whl
 ```
 
 Donde la URL corresponde con la versión que elegiste.
